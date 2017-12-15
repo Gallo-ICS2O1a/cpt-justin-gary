@@ -2,9 +2,9 @@ grid = [[1] * 3 for n in range(3)]
 w = 100
 
 
-
 def setup():
-  size(500, 300)
+    size(500, 300)
+
 
 def draw():
     x, y = 0, 0
