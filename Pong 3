@@ -24,7 +24,7 @@ def draw():
 
     background(51)
     
-    fill(255, 0 ,0)
+    fill(255, 0, 0)
     ellipse(x, y, w, h)
     
     if x > width - w / 2:
