@@ -1,0 +1,32 @@
+x = 500 / 2
+y = 500 / 2
+w = 50
+h = 50
+speed = 2
+paddleX = 0
+paddleY = 250 / 2
+
+
+def setup():
+    size(500, 500)
+
+    
+def draw():
+    global x 
+    global y
+    global w
+    global h
+    global speed
+    
+    background(51)
+    
+    fill(255, 0, 0)
+    rect(paddleX, paddleY, w / 2 - 5, 100)
+    ellipse(x, y, w, h)
+    
+    if x > width - w / 2:
+        speed = -speed
+        
+    if x < 0 + w / 2:
+        speed = -speed
+    x = x + speed
