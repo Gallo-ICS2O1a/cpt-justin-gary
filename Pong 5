@@ -2,7 +2,8 @@ x = 500 / 2
 y = 500 / 2
 w = 50
 h = 50
-speed = 2
+speedX = 2
+speedY = 3
 paddleX = 0
 paddleY = 250 / 2
 
@@ -16,7 +17,8 @@ def draw():
     global y
     global w
     global h
-    global speed
+    global speedX
+    global speedY
     
     background(51)
     
@@ -25,8 +27,17 @@ def draw():
     ellipse(x, y, w, h)
     
     if x > width - w / 2:
-        speed = -speed
+        speedX = -speedX
         
-    if x < 0 + w / 2:
-        speed = -speed
-    x = x + speed
+    elif x < 0 + w / 2:
+        speedX = -speedX
+        
+    if y > height - h / 2:
+        speedY = -speedY
+        
+    elif y < 0 + h / 2:
+        speedY = -speedY
+    
+    x = x + speedX
+    y = y + speedY
+    
