@@ -19,13 +19,13 @@ def draw():
     moveCircle()
     bounceDirection()
     drawPaddle()
+    restrictPaddle()
     
     if keyPressed:
         if key == 'w':
             paddleY = paddleY - paddleS
         if key == 's':
             paddleY = paddleY + paddleS
-    
 
 def drawCircle():
     fill(255, 0, 0)
@@ -56,11 +56,11 @@ def drawPaddle():
     fill(255)
     rect(paddleX, paddleY, paddleW, paddleH)
     
-
-
-
-
+def restrictPaddle():
+    global paddleY, paddleH
+    
+    if paddleY - paddleH / 2 < 0:
+        paddleY = paddleY + paddleS
         
-        
-        
-        
+    if paddleY + paddleH / 2 > height:
+        paddleY = paddleY - paddleS
