@@ -1,42 +1,66 @@
-x = 500 / 2
-y = 500 / 2
-w = 50
-h = 50
-speed = 2
-paddleX = 0
-paddleY = 250 / 2
-
+x, y = 250, 250
+w, h = 50, 50
+speedX, speedY = 2, 3
+paddleX = 40
+paddleY = 250
+paddleW = 30
+paddleH = 100
+paddleS = 5
 
 def setup():
     size(500, 500)
+    rectMode(CENTER)
 
-    
 def draw():
-    global x 
-    global y
-    global w
-    global h
-    global speed
-    
+    global paddleX, paddleY, paddleS
     background(51)
     
-    fill(255, 0, 0)
-    rect(paddleX, paddleY, w / 2 - 5, 100)
-    ellipse(x, y, w, h)
+    drawCircle()
+    moveCircle()
+    bounceDirection()
+    drawPaddle()
     
-    if x > width - w / 2:
-        speed = -speed
-        
-    if x < 0 + w / 2:
-        speed = -speed
-    x = x + speed
+    if keyPressed:
+        if key == 'w':
+            paddleY = paddleY - paddleS
+        if key == 's':
+            paddleY = paddleY + paddleS
     
 
-def keyPressed():
-    global paddleY
+def drawCircle():
+    fill(255, 0, 0)
+    ellipse(x, y, w, h)
     
-    if keyCode == UP:
-        paddleY = paddleY - 10
+
+def moveCircle():
+    global x, y
+    
+    x = x + speedX
+    y = y + speedY
+    
+
+def bounceDirection():
+    global speedX, speedY
+    if x > width - w / 2:
+        speedX = -speedX
+    elif x < 0 + w / 2:
+        speedX = -speedX
+    
+    if y > height - h / 2:
+        speedY = -speedY
+    elif y < 0 + h / 2:
+        speedY = -speedY
         
-    if keyCode == DOWN:
-        paddleY = paddleY + 10
+
+def drawPaddle():
+    fill(255)
+    rect(paddleX, paddleY, paddleW, paddleH)
+    
+
+
+
+
+        
+        
+        
+        
