@@ -1,6 +1,6 @@
-x, y = 80, 250
+x, y = 250, 250
 w, h = 50, 50
-speedX, speedY = 2, 3
+speedX, speedY = 5, 3
 paddleX = 40
 paddleY = 250
 paddleW = 30
@@ -69,5 +69,5 @@ def restrictPaddle():
 def contactPaddle():
     global speedX
     
-    if x - w / 2 < paddleX + paddleW / 2:
+    if x - w / 2 < paddleX + paddleW / 2 and y - h / 2 < paddleY + paddleH / 2 and y + h / 2 > paddleY - paddleH / 2:
         speedX = -speedX
