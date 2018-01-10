@@ -1,8 +1,9 @@
 x, y = 250, 250
 w, h = 50, 50
-speedX, speedY = 2, 3
+speedX, speedY = 5, 3
 paddleW = 30
 paddleH = 100
+
 keyStates = []
 
 for i in range(233):
@@ -23,14 +24,15 @@ def draw():
         paddle.y -= 5
     elif keyStates[40]:  # down
         paddle.y += 5
-        
+    
     background(51)
     
     drawCircle()
     moveCircle()
     bounceDirection()
     drawPaddle()
-    
+    restrictPaddle()
+    contactPaddle()
 
 def drawCircle():
     fill(255, 0, 0)
@@ -61,7 +63,20 @@ def drawPaddle():
     fill(255)
     rect(paddle.x, paddle.y, paddleW, paddleH)
     
-
+def restrictPaddle():
+    if paddle.y - paddleH / 2 < 0:
+        paddle.y += 5
+    if paddle.y + paddleH / 2 > height:
+        paddle.y -= 5
+        
+        
+def contactPaddle():
+    global speedX
+    
+    if (x - w / 2 < paddle.x + paddleW / 2 and y - h / 2 < paddle.y + paddleH / 2 
+        and y + h / 2 > paddle.y - paddleH ):
+        speedX = -speedX
+        
 def keyPressed():
     global keyStates
     keyStates[keyCode] = True
@@ -73,7 +88,4 @@ def keyReleased():
 
 
 
-        
-        
-        
         
