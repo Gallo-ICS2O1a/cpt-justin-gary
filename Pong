@@ -1,32 +1,36 @@
 x, y = 250, 250
 w, h = 50, 50
-speedX, speedY = 5, 3
-paddleX = 40
-paddleY = 250
+speedX, speedY = 2, 3
 paddleW = 30
 paddleH = 100
-paddleS = 5
+keyStates = []
+
+for i in range(233):
+    keyStates.append(False)
+paddle = PVector(40, 250)
 
 def setup():
     size(500, 500)
     rectMode(CENTER)
 
 def draw():
-    global paddleX, paddleY, paddleS
+    
+    # Key codes for arrows:
+    # up: 38
+    # down: 40
+       
+    if keyStates[38]:  # up
+        paddle.y -= 5
+    elif keyStates[40]:  # down
+        paddle.y += 5
+        
     background(51)
     
     drawCircle()
     moveCircle()
     bounceDirection()
     drawPaddle()
-    restrictPaddle()
-    contactPaddle()
-        
-    if keyPressed:
-        if key == 'w':
-            paddleY = paddleY - paddleS
-        if key == 's':
-            paddleY = paddleY + paddleS
+    
 
 def drawCircle():
     fill(255, 0, 0)
@@ -55,19 +59,21 @@ def bounceDirection():
 
 def drawPaddle():
     fill(255)
-    rect(paddleX, paddleY, paddleW, paddleH)
+    rect(paddle.x, paddle.y, paddleW, paddleH)
     
-def restrictPaddle():
-    global paddleY, paddleH
+
+def keyPressed():
+    global keyStates
+    keyStates[keyCode] = True
     
-    if paddleY - paddleH / 2 < 0:
-        paddleY = paddleY + paddleS
+    
+def keyReleased():
+    global keyStates
+    keyStates[keyCode] = False
+
+
+
         
-    if paddleY + paddleH / 2 > height:
-        paddleY = paddleY - paddleS
-    
-def contactPaddle():
-    global speedX
-    
-    if x - w / 2 < paddleX + paddleW / 2 and y - h / 2 < paddleY + paddleH / 2 and y + h / 2 > paddleY - paddleH / 2:
-        speedX = -speedX
+        
+        
+        
