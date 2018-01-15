@@ -1,8 +1,8 @@
 ICS2O1 CPT Rubric
 
-**Name(s):**
-**Topic Name:** 
-**Program Features:**
+**Name(s):**Justin Howe and Gary Gao
+**Topic Name:** Pong
+**Program Features:**Bounces off the paddles 
 
 <table>
   <tr>
