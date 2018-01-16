@@ -6,6 +6,7 @@ paddleH = 100
 paddleS = 5
 keyStatesL = []
 keyStatesR = []
+
 for i in range(233):
     keyStatesR.append(False)
 paddleR = PVector(460, 250)
@@ -30,7 +31,7 @@ def draw():
     elif keyStatesL[83]:
         paddleL.y += 5
         
-    background(51)
+    background(0)
     
     drawCircle()
     moveCircle()
@@ -65,8 +66,9 @@ def bounceDirection():
         
 
 def drawPaddle():
-    fill(255)
+    fill(255, 238, 0)
     rect(paddleR.x, paddleR.y, paddleW, paddleH)
+    fill(21, 255, 0)
     rect(paddleL.x, paddleL.y, paddleW, paddleH)
     
 def restrictPaddle():
@@ -86,11 +88,13 @@ def contactPaddle():
     global speedX
     if (x - w / 2 < paddleL.x + paddleW / 2 and y - h / 2 < paddleL.y + paddleH / 2 
         and y + h / 2 > paddleL.y - paddleH ):
-        speedX = -speedX
+        if speedX < 0:
+            speedX = -speedX
     
-    if (x + w / 2 > paddleR.x - paddleW / 2 and y - h / 2 < paddleR.y + paddleH / 2 
+    elif (x + w / 2 > paddleR.x - paddleW / 2 and y - h / 2 < paddleR.y + paddleH / 2 
         and y + h / 2 > paddleR.y - paddleH ):
-        speedX = -speedX
+        if speedX > 0:
+            speedX = -speedX
                 
 def keyPressed():
     global keyStatesR
