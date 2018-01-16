@@ -3,28 +3,33 @@ w, h = 50, 50
 speedX, speedY = 5, 3
 paddleW = 30
 paddleH = 100
-
-keyStates = []
+paddleS = 5
+keyStatesL = []
+keyStatesR = []
+for i in range(233):
+    keyStatesR.append(False)
+paddleR = PVector(460, 250)
 
 for i in range(233):
-    keyStates.append(False)
-paddle = PVector(40, 250)
+    keyStatesL.append(False)
+paddleL = PVector(40, 250)
 
 def setup():
     size(500, 500)
     rectMode(CENTER)
 
 def draw():
+    global keyStatesR
     
-    # Key codes for arrows:
-    # up: 38
-    # down: 40
-       
-    if keyStates[38]:  # up
-        paddle.y -= 5
-    elif keyStates[40]:  # down
-        paddle.y += 5
-    
+    if keyStatesR[38]:  # up
+        paddleR.y -= 5
+    elif keyStatesR[40]:  # down
+        paddleR.y += 5   
+    if keyStatesL[87]:
+        paddleL.y -= 5
+    elif keyStatesL[83]:
+        paddleL.y += 5
+        
     background(51)
     
     drawCircle()
@@ -61,31 +66,43 @@ def bounceDirection():
 
 def drawPaddle():
     fill(255)
-    rect(paddle.x, paddle.y, paddleW, paddleH)
+    rect(paddleR.x, paddleR.y, paddleW, paddleH)
+    rect(paddleL.x, paddleL.y, paddleW, paddleH)
     
 def restrictPaddle():
-    if paddle.y - paddleH / 2 < 0:
-        paddle.y += 5
-    if paddle.y + paddleH / 2 > height:
-        paddle.y -= 5
+    global paddleS
+    if paddleR.y - paddleH / 2 < 0:
+        paddleR.y += 5
+    if paddleR.y + paddleH / 2 > height:
+        paddleR.y -= 5
+        
+    if paddleL.y - paddleH / 2 < 0:
+        paddleL.y = paddleL.y + paddleS
+    if paddleL.y + paddleH / 2 > height:
+        paddleL.y = paddleL.y - paddleS
         
         
 def contactPaddle():
     global speedX
-    
-    if (x - w / 2 < paddle.x + paddleW / 2 and y - h / 2 < paddle.y + paddleH / 2 
-        and y + h / 2 > paddle.y - paddleH ):
+    if (x - w / 2 < paddleL.x + paddleW / 2 and y - h / 2 < paddleL.y + paddleH / 2 
+        and y + h / 2 > paddleL.y - paddleH ):
         speedX = -speedX
-        
+    
+    if (x + w / 2 > paddleR.x - paddleW / 2 and y - h / 2 < paddleR.y + paddleH / 2 
+        and y + h / 2 > paddleR.y - paddleH ):
+        speedX = -speedX
+                
 def keyPressed():
-    global keyStates
-    keyStates[keyCode] = True
+    global keyStatesR
+    global keyStatesL
+    keyStatesR[keyCode] = True
+    keyStatesL[keyCode] = True
     
     
 def keyReleased():
-    global keyStates
-    keyStates[keyCode] = False
+    global keyStatesR
+    global keyStatesL
+    keyStatesR[keyCode] = False
+    keyStatesL[keyCode] = False
 
-
-
-        
+    
