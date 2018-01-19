@@ -3,53 +3,82 @@ w, h = 50, 50
 speedX, speedY = 5, 3
 paddleW = 30
 paddleH = 100
-paddleS = 5
+paddleS = 10
 keyStatesL = []
 keyStatesR = []
+font = PFont
+t = int
+interval = 3
+screen = 2
+currenttime = int(millis() / 1000)
 
 for i in range(233):
     keyStatesR.append(False)
-paddleR = PVector(460, 250)
+paddleR = PVector(485, 250)
 
 for i in range(233):
     keyStatesL.append(False)
-paddleL = PVector(40, 250)
+paddleL = PVector(15, 250)
 
 def setup():
     size(500, 500)
     rectMode(CENTER)
+    ellipseMode(CENTER)
 
 def draw():
     global keyStatesR
+    global screen
+    global time
     
-    if keyStatesR[38]:  # up
-        paddleR.y -= 5
-    elif keyStatesR[40]:  # down
-        paddleR.y += 5   
-    if keyStatesL[87]:
-        paddleL.y -= 5
-    elif keyStatesL[83]:
-        paddleL.y += 5
+    if screen == 1:
+        if keyStatesR[38]:  # up
+            paddleR.y -= 5
+        elif keyStatesR[40]:  # down
+            paddleR.y += 5  
+        if keyStatesL[87]:
+            paddleL.y -= 5
+        elif keyStatesL[83]:
+            paddleL.y += 5
+            
+        background(0)
         
-    background(0)
+        drawBall()
+        moveBall()
+        bounceDirection()
+        drawPaddle()
+        restrictPaddle()
+        contactPaddle()
     
-    drawCircle()
-    moveCircle()
-    bounceDirection()
-    drawPaddle()
-    restrictPaddle()
-    contactPaddle()
-
-def drawCircle():
+    elif screen == 2:
+        global interval
+        background(0)
+        
+        fill(255, 0, 0)
+        ellipse(250, 250, 50, 50)
+        
+        interval = interval + currenttime
+    
+        t = interval - int(millis() / 1000)
+        time = nf(t, 1)
+        
+        if t == 0:
+            screen = 1
+            #interval += 3
+        
+        fill(255)
+        textSize(100)
+        text(time, width / 2 - 30, height / 2 + 35);
+    
+def drawBall():
     fill(255, 0, 0)
     ellipse(x, y, w, h)
     
 
-def moveCircle():
+def moveBall():
     global x, y
     
-    x = x + speedX
-    y = y + speedY
+    x += speedX
+    y += speedY
     
 
 def bounceDirection():
@@ -63,7 +92,7 @@ def bounceDirection():
         speedY = -speedY
     elif y < 0 + h / 2:
         speedY = -speedY
-        
+
 
 def drawPaddle():
     fill(255, 238, 0)
@@ -85,16 +114,36 @@ def restrictPaddle():
         
         
 def contactPaddle():
-    global speedX
-    if (x - w / 2 < paddleL.x + paddleW / 2 and y - h / 2 < paddleL.y + paddleH / 2 
-        and y + h / 2 > paddleL.y - paddleH ):
+    global speedX, screen
+    global x, y
+    
+    # left paddle
+    if x == 50 and y < paddleL.y + 70 and y > paddleL.y - 70:
         if speedX < 0:
             speedX = -speedX
-    
-    elif (x + w / 2 > paddleR.x - paddleW / 2 and y - h / 2 < paddleR.y + paddleH / 2 
-        and y + h / 2 > paddleR.y - paddleH ):
+
+    elif x == 20:
+        screen = 2
+        interval = 3
+        x = 250
+        y = 250
+        
+    # right paddle
+    if x == 450 and y < paddleR.y + 70 and y > paddleL.y - 70:
         if speedX > 0:
             speedX = -speedX
+            
+
+    
+#    if (x - w / 2 < paddleL.x + paddleW / 2 and y - h / 2 < paddleL.y + paddleH / 2 
+#        and y + h / 2 > paddleL.y - paddleH ):
+#        if speedX < 0:
+#            speedX = -speedX
+   
+#    elif (x + w / 2 > paddleR.x - paddleW / 2 and y - h / 2 < paddleR.y + paddleH / 2 
+#        and y + h / 2 > paddleR.y - paddleH ):
+#        if speedX > 0:
+#            speedX = -speedX
                 
 def keyPressed():
     global keyStatesR
@@ -108,5 +157,4 @@ def keyReleased():
     global keyStatesL
     keyStatesR[keyCode] = False
     keyStatesL[keyCode] = False
-
     
