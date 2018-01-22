@@ -6,14 +6,14 @@ paddleH = 100
 paddleS = 10
 keyStatesL = []
 keyStatesR = []
-screen = 5
+screen = 3
 contSize = 40
 score1, score2 = 0, 0
 playSize = 30
 textY, textS = 100, 2
 colour1 = color(0, 0, 0)
 colour2 = color(0, 0, 0)
-
+timeAccessed = None
 for i in range(233):
     keyStatesR.append(False)
 paddleR = PVector(485, 250)
@@ -103,7 +103,7 @@ def draw():
 
         if (mouseX >= 20 and mouseX <= 150 and mouseY >= 220 and
            mouseY <= 250 and mousePressed):
-            screen = 1
+            screen = 5
 
     if screen == 4:
         fill(255, 0, 0, 70)
@@ -119,6 +119,8 @@ def draw():
         drawScore()
 
     if screen == 5:
+        global timeAccessed
+        timeAccessed = timeAccessed or millis()
         import time
         background(0)
         drawBall()
@@ -128,9 +130,9 @@ def draw():
         fill(255)
         textSize(50)
         text("Ready?", 175, 265)
-
-        time.sleep(2)
-        screen = 1
+        if millis() > timeAccessed + 2000:
+            timeAccessed = None
+            screen = 1
 
 
 def drawScore():
