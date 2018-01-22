@@ -1,6 +1,6 @@
 x, y = 250, 250
 w, h = 50, 50
-speedX, speedY = 5, 3
+speedX, speedY = 5, 4
 paddleW = 30
 paddleH = 100
 paddleS = 10
@@ -9,7 +9,7 @@ keyStatesR = []
 screen = 3
 contSize = 40
 score1, score2 = 0, 0
-playSize = 30
+playSize, htpSize, backSize = 30, 30, 20
 textY, textS = 100, 2
 colour1 = color(0, 0, 0)
 colour2 = color(0, 0, 0)
@@ -91,6 +91,19 @@ def draw():
         fill(255, 0, 0)
         text("o", 59, textY)
 
+        textSize(htpSize)
+        fill(colour1)
+        text("How to Play", 20, 200)
+        if mouseX >= 20 and mouseX <= 250 and mouseY >= 170 and mouseY <= 200:
+            htpSize = 40
+            colour1 = color(255, 238, 0)
+        else:
+            htpSize = 30
+            colour1 = color(21, 255, 0)
+            
+        if mouseX >= 20 and mouseX <= 250 and mouseY >= 170 and mouseY <= 200 and mousePressed:
+            screen = 6
+            
         textSize(playSize)
         fill(colour2)
         text("Play", 20, 250)
@@ -133,7 +146,24 @@ def draw():
         if millis() > timeAccessed + 2000:
             timeAccessed = None
             screen = 1
-
+        
+    if screen == 6:
+        global backSize
+        background(0)
+        textSize(20)
+        fill(255)
+        text("Player 1: W - Up, S - Down", 20, 100)
+        text("PLayer 2: ARROW KEYS - Up, Down", 20, 140)
+        
+        textSize(backSize)
+        fill(255)
+        text("BACK", 20, 470)
+        if mouseX >= 20 and mouseX <= 150 and mouseY >= 440 and mouseY <= 470:
+            backSize = 30
+        else:
+            backSize = 20
+        if mouseX >= 20 and mouseX <= 150 and mouseY >= 440 and mouseY <= 470 and mousePressed:
+            screen = 3
 
 def drawScore():
     textMode(CENTER)
