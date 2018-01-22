@@ -100,10 +100,11 @@ def draw():
         else:
             htpSize = 30
             colour1 = color(21, 255, 0)
-            
-        if mouseX >= 20 and mouseX <= 250 and mouseY >= 170 and mouseY <= 200 and mousePressed:
+
+        if (mouseX >= 20 and mouseX <= 250 and mouseY >= 170 and
+           mouseY <= 200 and mousePressed):
             screen = 6
-            
+
         textSize(playSize)
         fill(colour2)
         text("Play", 20, 250)
@@ -146,7 +147,7 @@ def draw():
         if millis() > timeAccessed + 2000:
             timeAccessed = None
             screen = 1
-        
+
     if screen == 6:
         global backSize
         background(0)
@@ -154,7 +155,7 @@ def draw():
         fill(255)
         text("Player 1: W - Up, S - Down", 20, 100)
         text("PLayer 2: ARROW KEYS - Up, Down", 20, 140)
-        
+
         textSize(backSize)
         fill(255)
         text("BACK", 20, 470)
@@ -162,8 +163,10 @@ def draw():
             backSize = 30
         else:
             backSize = 20
-        if mouseX >= 20 and mouseX <= 150 and mouseY >= 440 and mouseY <= 470 and mousePressed:
+        if (mouseX >= 20 and mouseX <= 150 and mouseY >= 440 and
+           mouseY <= 470 and mousePressed):
             screen = 3
+
 
 def drawScore():
     textMode(CENTER)
