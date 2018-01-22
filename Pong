@@ -6,11 +6,13 @@ paddleH = 100
 paddleS = 10
 keyStatesL = []
 keyStatesR = []
-font = PFont
-t = int
-interval = 3
-screen = 2
-currenttime = int(millis() / 1000)
+screen = 5
+contSize = 40
+score1, score2 = 0, 0
+playSize = 30
+textY, textS = 100, 2
+colour1 = color(0, 0, 0)
+colour2 = color(0, 0, 0)
 
 for i in range(233):
     keyStatesR.append(False)
@@ -20,66 +22,136 @@ for i in range(233):
     keyStatesL.append(False)
 paddleL = PVector(15, 250)
 
+
 def setup():
     size(500, 500)
     rectMode(CENTER)
     ellipseMode(CENTER)
+    textMode(CENTER)
+
 
 def draw():
     global keyStatesR
     global screen
-    global time
-    
+    global htpSize, playSize
+
     if screen == 1:
         if keyStatesR[38]:  # up
             paddleR.y -= 5
         elif keyStatesR[40]:  # down
-            paddleR.y += 5  
+            paddleR.y += 5
         if keyStatesL[87]:
             paddleL.y -= 5
         elif keyStatesL[83]:
             paddleL.y += 5
-            
+
         background(0)
-        
+
         drawBall()
+        drawPaddle()
         moveBall()
         bounceDirection()
-        drawPaddle()
         restrictPaddle()
         contactPaddle()
-    
-    elif screen == 2:
-        global interval
+        drawScore()
+
+    if screen == 2:
         background(0)
-        
-        fill(255, 0, 0)
-        ellipse(250, 250, 50, 50)
-        
-        interval = interval + currenttime
-    
-        t = interval - int(millis() / 1000)
-        time = nf(t, 1)
-        
-        if t == 0:
+        global contSize
+        textSize(contSize)
+
+        if mouseX >= 160 and mouseX <= 340 and mouseY >= 260 and mouseY <= 300:
+            fill(34, 139, 34)
+            contSize = 50
+            contX = 140
+        else:
+            fill(255, 0, 0)
+            contSize = 40
+            contX = 160
+        text("Continue", contX, 300)
+        if (mouseX >= 160 and mouseX <= 340 and mouseY >= 260 and
+           mouseY <= 300 and mousePressed):
             screen = 1
-            #interval += 3
-        
+
+    if screen == 3:
+        global textY, textS
+        global colour1, colour2
+
+        background(0)
+
+        if textY >= 100:
+            textS = -textS
+        elif textY <= 25:
+            textS = -textS
+        textY += textS
+
+        textSize(50)
         fill(255)
-        textSize(100)
-        text(time, width / 2 - 30, height / 2 + 35);
-    
+        text("P  ng", 30, 100)
+        fill(255, 0, 0)
+        text("o", 59, textY)
+
+        textSize(playSize)
+        fill(colour2)
+        text("Play", 20, 250)
+        if mouseX >= 20 and mouseX <= 150 and mouseY >= 220 and mouseY <= 250:
+            playSize = 40
+            colour2 = color(255, 238, 0)
+        else:
+            playSize = 30
+            colour2 = color(21, 255, 0)
+
+        if (mouseX >= 20 and mouseX <= 150 and mouseY >= 220 and
+           mouseY <= 250 and mousePressed):
+            screen = 1
+
+    if screen == 4:
+        fill(255, 0, 0, 70)
+        rect(250, 250, 500, 500)
+        fill(255)
+        textSize(20)
+        text("Click Anywhere to Continue", 110, 350)
+        if (mouseX >= 0 and mouseX <= 500 and mouseY >= 0 and
+           mouseY <= 500 and mousePressed):
+            screen = 5
+        drawBall()
+        drawPaddle()
+        drawScore()
+
+    if screen == 5:
+        import time
+        background(0)
+        drawBall()
+        drawPaddle()
+        drawScore()
+
+        fill(255)
+        textSize(50)
+        text("Ready?", 175, 265)
+
+        time.sleep(2)
+        screen = 1
+
+
+def drawScore():
+    textMode(CENTER)
+    textSize(40)
+    fill(255)
+    text(score1, 150, 50)
+    text(score2, 320, 50)
+
+
 def drawBall():
     fill(255, 0, 0)
     ellipse(x, y, w, h)
-    
+
 
 def moveBall():
     global x, y
-    
+
     x += speedX
     y += speedY
-    
+
 
 def bounceDirection():
     global speedX, speedY
@@ -87,7 +159,7 @@ def bounceDirection():
         speedX = -speedX
     elif x < 0 + w / 2:
         speedX = -speedX
-    
+
     if y > height - h / 2:
         speedY = -speedY
     elif y < 0 + h / 2:
@@ -99,62 +171,60 @@ def drawPaddle():
     rect(paddleR.x, paddleR.y, paddleW, paddleH)
     fill(21, 255, 0)
     rect(paddleL.x, paddleL.y, paddleW, paddleH)
-    
+
+
 def restrictPaddle():
     global paddleS
     if paddleR.y - paddleH / 2 < 0:
         paddleR.y += 5
     if paddleR.y + paddleH / 2 > height:
         paddleR.y -= 5
-        
+
     if paddleL.y - paddleH / 2 < 0:
         paddleL.y = paddleL.y + paddleS
     if paddleL.y + paddleH / 2 > height:
         paddleL.y = paddleL.y - paddleS
-        
-        
+
+
 def contactPaddle():
     global speedX, screen
     global x, y
-    
+    global score1, score2
+
     # left paddle
     if x == 50 and y < paddleL.y + 70 and y > paddleL.y - 70:
         if speedX < 0:
             speedX = -speedX
 
-    elif x == 20:
-        screen = 2
-        interval = 3
+    if x <= 25:
+        screen = 4
+        score2 += 1
         x = 250
         y = 250
-        
+        paddleL.y, paddleR.y = 250, 250
+
     # right paddle
-    if x == 450 and y < paddleR.y + 70 and y > paddleL.y - 70:
+    if x == 450 and y < paddleR.y + 70 and y > paddleR.y - 70:
         if speedX > 0:
             speedX = -speedX
-            
 
-    
-#    if (x - w / 2 < paddleL.x + paddleW / 2 and y - h / 2 < paddleL.y + paddleH / 2 
-#        and y + h / 2 > paddleL.y - paddleH ):
-#        if speedX < 0:
-#            speedX = -speedX
-   
-#    elif (x + w / 2 > paddleR.x - paddleW / 2 and y - h / 2 < paddleR.y + paddleH / 2 
-#        and y + h / 2 > paddleR.y - paddleH ):
-#        if speedX > 0:
-#            speedX = -speedX
-                
+    if x >= 475:
+        screen = 4
+        score1 += 1
+        x = 250
+        y = 250
+        paddleL.y, paddleR.y = 250, 250
+
+
 def keyPressed():
     global keyStatesR
     global keyStatesL
     keyStatesR[keyCode] = True
     keyStatesL[keyCode] = True
-    
-    
+
+
 def keyReleased():
     global keyStatesR
     global keyStatesL
     keyStatesR[keyCode] = False
     keyStatesL[keyCode] = False
-    
